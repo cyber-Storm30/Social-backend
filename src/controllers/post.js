@@ -52,15 +52,15 @@ export const updatePost = async (req, res) => {
 };
 
 export const getPosts = async (req, res) => {
-  const query = req.query.new;
+  const userId = req.query.userId;
   try {
     let posts;
-    if (query) {
-      posts = await Post.find().sort({ createdAt: -1 }).limit(20);
+    if (userId) {
+      posts = await Post.find({ userId: userId });
     } else {
       posts = await Post.find();
-      res.status(200).json({ data: posts });
     }
+    res.status(200).json({ data: posts });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -75,6 +75,18 @@ export const likeorDislikePosts = async (req, res) => {
     } else {
       await post.updateOne({ $pull: { likes: req.body.userId } });
       res.status(200).json("Post has been disliked !!!");
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const commentPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (post) {
+      await post.updateOne({ $push: { comments: req.body } });
+      res.status(200).json(post);
     }
   } catch (err) {
     res.status(500).json({ message: err.message });

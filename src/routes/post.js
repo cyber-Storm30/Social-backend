@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  commentPost,
   createPost,
   deletePost,
   getPosts,
@@ -19,5 +20,7 @@ router.delete("/:id", deletePost);
 router.put("/:id", updatePost);
 //like or dislike a post
 router.put("/:id/like", likeorDislikePosts);
+//comment
+router.put("/:id/comment", commentPost);
 
 export default router;

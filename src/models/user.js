@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    coverpic: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,
@@ -22,6 +25,10 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    followers: {
+      type: [{}],
+      default: [],
     },
     isAdmin: {
       type: Boolean,

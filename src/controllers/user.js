@@ -15,7 +15,7 @@ export const updateUser = async (req, res) => {
         },
         { new: true }
       );
-      res.status(200).json({ newUser: newUser });
+      res.status(200).json(newUser);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -38,6 +38,21 @@ export const getUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     const { password, ...newUser } = user._doc;
     res.status(200).json(newUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const followAndUnfollow = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user.followers.includes(req.body.userId)) {
+      await user.updateOne({ $push: { followers: req.body.userId } });
+      res.status(200).json("user has been followed !!!");
+    } else {
+      await user.updateOne({ $pull: { followers: req.body.userId } });
+      res.status(200).json("user has been unfollowed !!!");
+    }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

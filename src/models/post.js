@@ -13,7 +13,7 @@ const postSchema = new mongoose.Schema(
     body: {
       type: String,
       required: true,
-      minlength: 10,
+      minlength: 3,
       maxlength: 4000,
     },
     image: {
@@ -27,7 +27,7 @@ const postSchema = new mongoose.Schema(
       default: [],
     },
     comments: {
-      type: [String],
+      type: [{}],
       default: [],
     },
   },
