@@ -27,10 +27,15 @@ export const userRegister = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    !user && res.status(404).json({ message: "User not found!!" });
-
+    if(!user){
+      return res.json({status:false,message:"You are not yet registed."})
+    }
+    else{
     const validated = await bcrypt.compare(req.body.password, user.password);
-    !validated && res.status(401).json({ message: "Wrong credentials !!!" });
+    if(!validated){ 
+    return res.json({status:false, message: "Wrong credentials !!!" });
+    }
+    else{
 
     const accessToken = jwt.sign(
       {
@@ -41,8 +46,11 @@ export const userLogin = async (req, res) => {
       { expiresIn: "10d" }
     );
     const { password, ...newUser } = user._doc;
-    res.status(200).json({ newUser, accessToken });
-  } catch (err) {
+    res.status(200).json({status:true, newUser, accessToken });
+    }
+  } 
+}
+catch (err) {
     res.status(500).json({ message: err.message });
   }
 };

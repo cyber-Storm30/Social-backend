@@ -4,7 +4,7 @@ import Post from "../models/post.js";
 const router = express.Router();
 
 export const createPost = async (req, res) => {
-  const newPost = Post(req.body);
+  const newPost = new Post(req.body);
   try {
     const savedPost = await newPost.save();
     res.status(200).json({ data: savedPost });

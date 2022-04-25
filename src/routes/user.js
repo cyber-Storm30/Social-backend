@@ -1,7 +1,7 @@
 import express from "express";
 import {
   deleteUser,
-  followAndUnfollow,
+  follow,
   getUser,
   updateUser,
 } from "../controllers/user.js";
@@ -11,7 +11,8 @@ const router = express.Router();
 
 router.put("/:id", verifyUser, updateUser);
 router.delete("/:id", verifyUser, deleteUser);
-router.get("/:id", verifyUser, getUser);
-router.put("/:id/follow&unfollow", followAndUnfollow);
+router.get("/:id", getUser);
+router.put("/:id/followUnfollow", follow);
+// router.put("/:id/unfollow", unfollow);
 
 export default router;
