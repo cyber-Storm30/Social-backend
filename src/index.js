@@ -26,7 +26,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/user", userRoutes);
 
 //database
-mongoose.connect(process.env.MONGO_URL, options).then(() => {
+mongoose.connect("mongodb+srv://ranajit:ranajit@cluster0.5hxlt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", options).then(() => {
   console.log("Database connected");
 });
 
