@@ -6,6 +6,8 @@ import expressValidator from "express-validator";
 import postRoutes from "./routes/post.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
+import chatRoutes from "./routes/chat.js";
+import messageRoutes from "./routes/message.js";
 
 const app = express();
 
@@ -24,6 +26,8 @@ let options = {
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/message", messageRoutes);
 
 //database
 mongoose.connect(process.env.MONGO_URL, options).then(() => {

@@ -56,7 +56,7 @@ export const follow = async (req, res) => {
       } else {
         await user.updateOne({ $pull: { followers: req.body.userId } });
         await currentUser.updateOne({ $pull: { followings: req.params.id } });
-        res.status(200).json("user has been unfollowed")
+        res.status(200).json("user has been unfollowed");
       }
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -66,23 +66,20 @@ export const follow = async (req, res) => {
   }
 };
 
-// export const unfollow = async (req, res) => {
-//   if (req.params.id != req.body.userId) {
-//     try {
-//       //currentUser will unfollow user
-//       const currentUser = await User.findById(req.params.id);
-//       const user = await User.findById(req.body.userId);
-//       if (!user.followers.includes(req.body.userId)) {
-//         await user.updateOne({ $pull: { followers: req.body.userId } });
-//         await currentUser.updateOne({ $pull: { followings: req.params.id } });
-//         res.status(200).json("user has been unfollowed");
-//       } else {
-//         res.status(403).json("You dont follow the user");
-//       }
-//     } catch (err) {
-//       res.status(500).json({ message: err.message });
-//     }
-//   } else {
-//     req.status(403).json("You cannot unfollow yourself");
-//   }
-// };
+export const getAllUsers = async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  try {
+    const users = await User.find(keyword).find({ _id: { $ne: req.body._id } });
+    res.status(202).json({ data: users });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
