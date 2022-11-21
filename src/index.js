@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
 import chatRoutes from "./routes/chat.js";
 import messageRoutes from "./routes/message.js";
+import { Server } from "socket.io";
 
 const app = express();
 
@@ -37,4 +38,20 @@ mongoose.connect(process.env.MONGO_URL, options).then(() => {
 //server
 const server = app.listen(process.env.PORT, () => {
   console.log(`Server Connected on port ${process.env.PORT}`);
+});
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("connected to socket.io");
+  socket.on("setup", (userData) => {
+    socket.join(userData._id);
+    console.log(userData._id);
+    socket.emit("connected");
+  });
 });
